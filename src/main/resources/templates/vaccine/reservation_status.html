@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default_layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="content" layout:fragment="content" >
+    <table class="table table-bordered table-hover">
+        <thead class="table-light">
+        <tr>
+            <th>병원지역</th>
+            <th>병원지역명</th>
+            <th>접종예약건수</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!--        예약번호, 성명, 성별, 병원이름, 예약날짜, 예약시간, 백신코드, 병원지역-->
+        <tr th:each="status : ${reserve}" th:object="${status}" style="text-align=center;">
+            <td th:text="*{hosp_addr}"></td>
+            <td th:switch="*{hosp_addr}">
+                <span th:case="10">서울</span>
+                <span th:case="20">대전</span>
+                <span th:case="30">대구</span>
+                <span th:case="40">광주</span>
+            </td>
+            <td th:text="*{resv_count}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default_layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div class="content" layout:fragment="content" >
+    <h5 style="text-align: center;"><b th:text="'검색어 ' + ${keyword} + '의 예약 조회'"></b></h5>
+    <br>
+    <table class="table table-bordered table-hover">
+        <thead class="table-light">
+            <tr>
+                <th>예약번호</th>
+                <th>성명</th>
+                <th>성별</th>
+                <th>병원이름</th>
+                <th>예약날짜</th>
+                <th>예약시간</th>
+                <th>백신코드</th>
+                <th>병원지역</th>
+            </tr>
+        </thead>
+        <tbody>
+<!--        예약번호, 성명, 성별, 병원이름, 예약날짜, 예약시간, 백신코드, 병원지역-->
+            <tr th:each="reserve : ${reserve}" th:object="${reserve}" style="text-align=center;">
+                <td th:text="*{resv_no}"></td>
+                <td th:text="*{name}"></td>
+                <td th:switch="${#strings.substring(reserve.jumin, 7, 8)}">
+                    <span th:case="1">남</span>
+                    <span th:case="2">여</span>
+                </td>
+                <td th:text="*{hosp_name}"></td>
+                <td th:text="${#temporals.format(reserve.resv_date, 'yyyy년MM월dd일')}"></td>
+                <td th:text="*{resv_time}"></td>
+                <td th:text="*{v_code}"></td>
+                <td th:switch="*{hosp_addr}">
+                    <span th:case="10">서울</span>
+                    <span th:case="20">대전</span>
+                    <span th:case="30">대구</span>
+                    <span th:case="40">광주</span>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <div style="text-align: center;">
+        <a th:href="@{/reservation_search}" class="btn btn-outline-primary btn-sm me-2">돌아가기</a>
+    </div>
+    </div>
+
+</body>
+</html>

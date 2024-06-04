@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/default_layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script type="text/javascript" th:src="@{/js/check.js}"></script>
+</head>
+<body>
+<div class="content" layout:fragment="content" >
+    <br>
+    <h2 style="text-align:center;">예약 검색</h2>
+    <br>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <form class="row g-3 align-items-center" id="frm" th:action="@{/search}" method="get">
+                    <div class="col-auto">
+                        <input class="form-control" id="keyword" type="text" name="keyword" aria-describedby="searchButton">
+                    </div>
+                    <div class="col-auto">
+                        <button class="btn btn-success" id="searchButton" type="button" onclick="searchCheck()">검색</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <br>
+        <div style="text-align: center;">
+            <a th:href="@{/}" class="btn btn-outline-success btn-sm me-2">홈으로</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

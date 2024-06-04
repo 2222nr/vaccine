@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.vaccineManager.mapper.VaccineMapper">
+    <update id="setVal" >
+        SELECT setval('vaccresv_resv_no_seq', (SELECT COALESCE(MAX(resv_no), 0) FROM vaccresv))
+    </update>
+    <select id="findNextVal" resultType="Long">
+        SELECT nextval('vaccresv_resv_no_seq')
+    </select>
+    <insert id="save" parameterType="vaccresvDto">
+        INSERT INTO vaccresv (resv_no, jumin, hosp_code, resv_date, resv_time, v_code)
+        VALUES(#{vaccresvDto.resv_no}, #{vaccresvDto.jumin}, #{vaccresvDto.hosp_code}, #{vaccresvDto.resv_date}, #{vaccresvDto.resv_time}, #{vaccresvDto.v_code})
+    </insert>
+    <select id="findByResvNo" resultType="reserveDto" >
+        SELECT v.resv_no, j.name, j.jumin, h.hosp_name, v.resv_date, v.resv_time, v.v_code, h.hosp_addr
+        FROM vaccresv as v
+        JOIN jumin as j ON j.jumin = v.jumin
+        JOIN hospital as h ON h.hosp_code = v.hosp_code
+    </select>
+    <select id="searchKeyword" parameterType="map" resultType="reserveDto">
+        SELECT v.resv_no, j.name, v.jumin, h.hosp_name, v.resv_date, v.resv_time, v.v_code, h.hosp_addr
+        FROM vaccresv as v
+        JOIN jumin as j ON j.jumin = v.jumin
+        JOIN hospital as h ON h.hosp_code = v.hosp_code
+        <where>
+            <choose>
+                <when test="isNumber">
+                    v.resv_no = CAST(#{keyword} AS BIGINT)
+                </when>
+                <when test="isDate">
+                    v.resv_date = TO_DATE(#{keyword}, 'YYYY-MM-DD')
+                </when>
+                <otherwise>
+                    v.jumin = #{keyword}
+                </otherwise>
+            </choose>
+        </where>
+    </select>
+    <select id="status" resultType="reserveDto">
+        SELECT h.hosp_addr, count(v.hosp_code) as resv_count from vaccresv as v
+        JOIN hospital as h ON h.hosp_code = v.hosp_code
+        GROUP BY h.hosp_code
+        ORDER BY h.hosp_code
+    </select>
+</mapper>
